@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
-import UserData from '@/components/UserData'
+import IndexPage from '@/components/Index'
 
 Vue.use(Router)
 
@@ -13,9 +13,9 @@ export default new Router({
             component: Login
         },
         {
-            path: '/UserData',
-            name: 'UserData',
-            component: UserData
+            path: '/index',
+            name: 'Index',
+            component: IndexPage
         }
     ]
 })

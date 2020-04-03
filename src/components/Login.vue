@@ -49,7 +49,7 @@ export default {
       userLogin () {
 
           if(this.userInfo.userName === localStorage.getItem('user-name') && this.userInfo.userPassword === localStorage.getItem('user-password')) {
-              this.$router.replace('/UserData')
+              this.$router.replace('/Index')
           } else {
               let snackbar = document.getElementById("snackbar");
               snackbar.innerHTML = '有効なユーザー名とパスワードを入力してください。'

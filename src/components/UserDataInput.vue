@@ -1,0 +1,120 @@
+<template>
+  <div class="row">
+      <div class="col-md-10 offset-md-1">
+          <!-- form user info -->
+          <div class="card card-outline-secondary">
+              <div class="card-header">
+                <h3 class="mb-0">
+                  ユーザー情報入力 <i class="fa fa-users"></i>
+                </h3>
+              </div>
+              <div class="card-body">
+                  <form class="form" role="form" >
+                      <div class="form-group row">
+                        <label for="firstname" class="col-lg-3 col-form-label form-control-label">姓</label>
+                        <div class="col-lg-9">
+                          <input v-model="userData.firstName" id="firstname" class="form-control" type="text" />
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="lastname" class="col-lg-3 col-form-label form-control-label">名</label>
+                        <div class="col-lg-9">
+                          <input v-model="userData.lastName" id="lastname" class="form-control" type="text" />
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="email" class="col-lg-3 col-form-label form-control-label">メール</label>
+                        <div class="col-lg-9">
+                          <input v-model="userData.email" id="email" class="form-control" type="email" />
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="company" class="col-lg-3 col-form-label form-control-label">会社</label>
+                        <div class="col-lg-9">
+                          <input v-model="userData.company" id="company" class="form-control" type="text" />
+                        </div>
+                      </div>
+                      <!-- <div class="form-group row">
+                        <label for="username" class="col-lg-3 col-form-label form-control-label">Username</label>
+                        <div class="col-lg-9">
+                          <input v-model="userData.userName" id="username" class="form-control" type="text" />
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="password" class="col-lg-3 col-form-label form-control-label">Password</label>
+                        <div class="col-lg-9">
+                          <input v-model="userData.userPassword" id="password" class="form-control" type="password" />
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="confirm_password" class="col-lg-3 col-form-label form-control-label">Confirm Password</label>
+                        <div class="col-lg-9">
+                          <input id="confirm_password" class="form-control" type="password" />
+                        </div>
+                      </div> -->
+                      <div class="form-group row">
+                        <label class="col-lg-3 col-form-label form-control-label"></label>
+                        <div class="col-lg-9">
+                          <input type="reset" class="btn btn-secondary mr-5" value="キャンセル" />
+                          <input type="button" class="btn btn-primary" value="保存する" @click="formSubmit" />
+                        </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <!-- /form user info -->
+      </div>
+      <div id="toastInputMessage myToast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+        <div class="toast-header">
+          <!-- <img src="..." class="rounded mr-2" alt="..."> -->
+          <strong class="mr-auto">ユーザー入力 <i class="fas fa-user-plus"></i></strong>
+          <small class="text-muted">1 sec ago</small>
+          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="toast-body">
+          ユーザーデータが保存されました。
+        </div>
+      </div>
+  </div>
+</template>
+<script>
+import * as DBCtrl from '@/libs/DB/DBAccessCtrl'
+import $ from 'jquery'
+export default ({
+    name: 'user-data-input',
+    data() {
+        return {
+            userData: {
+                userName    : localStorage.getItem('user-name'),
+                userPassword: localStorage.getItem('user-password'),
+                firstName   : "",
+                lastName    : "",
+                email       : "",
+                company     : "",
+                timeZone    : ""
+            }
+        }
+    },
+    mounted() {
+        $('#toastInputMessage').on('hidden.bs.toast', function () {
+          $('#v-pills-home-tab').tab('show')
+        })
+    },
+    methods: {
+        formSubmit ( ) {
+            let vm = this
+            let localDB = new DBCtrl.DBAccessCtrl('Local Database');
+            localDB.store(this.userData)
+            .then(function (result) {
+                vm.$store.commit('setUsers', result)
+                $('#toastInputMessage').toast('show')
+            })
+            .catch (function (err) {
+                console.error (err);
+            });
+        }
+    }
+});
+</script>
