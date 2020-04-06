@@ -6,7 +6,7 @@
               <div class="card-header">
                   <h3 class="mb-0">
                       ユーザー情報編集 <i class="fa fa-user-edit"></i>
-                      <select id="idselect" class="custom-select ml-3 w-auto" v-model="userID" @change="changeuser">
+                      <select id="idselect" class="custom-select ml-3 w-auto" v-model="userID" @change="changeUser">
                         <option v-for="id in allUserID" v-bind:key="id" v-bind:value="id">{{ allUserMap.get(id).firstname }}</option>
                     </select>
                   </h3>
@@ -14,44 +14,44 @@
               <div class="card-body">
                   <form class="form" role="form" >
                       <div class="form-group row">
-                        <label for="firstname" class="col-lg-3 col-form-label form-control-label">姓</label>
-                        <div class="col-lg-9">
+                        <label for="firstname-edit" class="col-md-3 col-form-label form-control-label">姓 <i class="fas fa-signature"></i></label>
+                        <div class="col-md-9">
                           <input v-model="user.firstname" id="firstname-edit" class="form-control" type="text" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="lastname" class="col-lg-3 col-form-label form-control-label">名</label>
-                        <div class="col-lg-9">
+                        <label for="lastname-edit" class="col-md-3 col-form-label form-control-label">名 <i class="fas fa-signature"></i></label>
+                        <div class="col-md-9">
                           <input v-model="user.lastname" id="lastname-edit" class="form-control" type="text" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="email" class="col-lg-3 col-form-label form-control-label">メール</label>
-                        <div class="col-lg-9">
+                        <label for="email-edit" class="col-md-3 col-form-label form-control-label">メール <i class="fas fa-envelope"></i></label>
+                        <div class="col-md-9">
                           <input v-model="user.email" id="email-edit" class="form-control" type="email" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="company" class="col-lg-3 col-form-label form-control-label">会社</label>
-                        <div class="col-lg-9">
+                        <label for="company-edit" class="col-md-3 col-form-label form-control-label">会社 <i class="fas fa-torii-gate"></i></label>
+                        <div class="col-md-9">
                           <input v-model="user.company" id="company-edit" class="form-control" type="text" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label"></label>
-                        <div class="col-lg-9">
-                          <input type="reset" class="btn btn-secondary mr-5" value="キャンセル" />
-                          <input type="button" class="btn btn-primary" value="保存する" @click="formSubmit" />
+                        <label class="col-md-3 col-form-label form-control-label"></label>
+                        <div class="col-md-9">
+                          <input type="reset" class="btn btn-sm btn-outline-secondary mr-5" value="キャンセル" />
+                          <input type="button" class="btn btn-sm btn-outline-success" value="保存する" @click="formSubmit" />
                         </div>
                       </div>
                   </form>
               </div>
           </div>
           <!-- /form user info -->
-          <div id="toastEditMessage myToast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+          <div id="toastEditMessage" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
               <div class="toast-header">
                   <!-- <img src="..." class="rounded mr-2" alt="..."> -->
-                  <strong class="mr-auto">ユーザー入力 <i class="fas fa-user-plus"></i></strong>
+                  <strong class="mr-auto">ユーザー編集 <i class="fas fa-user-plus"></i></strong>
                   <small class="text-muted">1 sec ago</small>
                   <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
@@ -72,33 +72,41 @@ export default ({
     props: ['editUserId'],
     data() {
         return {
-            userID: '',
-            allUserID: [],
-            allUserMap: [],
-            user: [],
-            polling: null
+            polling: null,
+            userID: null,
         }
     },
     mounted () {
         $('#toastEditMessage').on('hidden.bs.toast', function () {
             $('#v-pills-home-tab').tab('show');
         })
-        this.getUser();
-    },
-    watch: {
-        editUserId: function(){
-              this.userID = this.editUserId;
-              this.user = JSON.parse(JSON.stringify(this.allUserMap.get(this.userID)));
-        }
+        this.userID = this.allUserID[0];
+        // this.user = this.allUserMap.get(this.userID);
+        // this.getUser();
     },
     computed: {
         userData: {
             get: function () {
-                return this.$store.state.users
+                return this.$store.getters.getUsers;
             },
             set: function (newValue) {
                 this.$store.commit('setUsers', newValue)
             }
+        },
+        allUserMap () {
+            return new Map(this.userData.map(user => [user.id, user]));
+        },
+        allUserID () {
+            return Array.from( this.allUserMap.keys() );
+        },
+        user () {
+            return this.allUserMap.get(this.userID);
+        }
+    },
+    watch: {
+        editUserId: function(oldValue, newValue){
+            console.log('old: ', oldValue, 'new: ', newValue);
+            this.userID = this.editUserId;
         }
     },
     methods: {
@@ -113,12 +121,17 @@ export default ({
                 clearInterval(vm.polling)
               }, 1000)
         },
-        changeuser () {
-          this.user = JSON.parse(JSON.stringify(this.allUserMap.get(this.userID)));
+        changeUser () {
+            this.user = this.allUserMap.get(this.userID);
         },
         formSubmit ( ) {
+            console.log(Object.keys(this.userID).some(key => this.userID[key].dirty));
+
             let preUser = this.allUserMap.get(this.userID);
             let curUser = this.user;
+            console.log('pre:', JSON.stringify(preUser, null, 2));
+            console.log('cur:', JSON.stringify(curUser, null, 2));
+
             if (preUser.firstname === curUser.firstname)
                 delete curUser.firstname;
             if (preUser.lastname === curUser.lastname)

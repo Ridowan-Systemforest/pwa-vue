@@ -1,0 +1,16 @@
+{
+	"name": "my-first-vue",
+	"short_name": "my-first-vue",
+	"theme_color": "#808080",
+	"background_color": "#30B090",
+	"scope": "/",
+	"icons": [
+        {
+			"src": "favicon.ico",
+			"sizes": "32x32",
+			"type": "image/png"
+		}
+	],
+	"display": "standalone",
+	"start_url": "/index.html"
+}

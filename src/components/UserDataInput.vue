@@ -11,52 +11,34 @@
               <div class="card-body">
                   <form class="form" role="form" >
                       <div class="form-group row">
-                        <label for="firstname" class="col-lg-3 col-form-label form-control-label">姓</label>
-                        <div class="col-lg-9">
+                        <label for="firstname" class="col-md-3 col-form-label form-control-label">姓 <i class="fas fa-signature"></i></label>
+                        <div class="col-md-9">
                           <input v-model="userData.firstName" id="firstname" class="form-control" type="text" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="lastname" class="col-lg-3 col-form-label form-control-label">名</label>
-                        <div class="col-lg-9">
+                        <label for="lastname" class="col-md-3 col-form-label form-control-label">名 <i class="fas fa-signature"></i></label>
+                        <div class="col-md-9">
                           <input v-model="userData.lastName" id="lastname" class="form-control" type="text" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="email" class="col-lg-3 col-form-label form-control-label">メール</label>
-                        <div class="col-lg-9">
+                        <label for="email" class="col-md-3 col-form-label form-control-label">メール <i class="fas fa-envelope"></i></label>
+                        <div class="col-md-9">
                           <input v-model="userData.email" id="email" class="form-control" type="email" />
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="company" class="col-lg-3 col-form-label form-control-label">会社</label>
-                        <div class="col-lg-9">
+                        <label for="company" class="col-md-3 col-form-label form-control-label">会社 <i class="fas fa-torii-gate"></i></label>
+                        <div class="col-md-9">
                           <input v-model="userData.company" id="company" class="form-control" type="text" />
                         </div>
                       </div>
-                      <!-- <div class="form-group row">
-                        <label for="username" class="col-lg-3 col-form-label form-control-label">Username</label>
-                        <div class="col-lg-9">
-                          <input v-model="userData.userName" id="username" class="form-control" type="text" />
-                        </div>
-                      </div>
                       <div class="form-group row">
-                        <label for="password" class="col-lg-3 col-form-label form-control-label">Password</label>
-                        <div class="col-lg-9">
-                          <input v-model="userData.userPassword" id="password" class="form-control" type="password" />
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="confirm_password" class="col-lg-3 col-form-label form-control-label">Confirm Password</label>
-                        <div class="col-lg-9">
-                          <input id="confirm_password" class="form-control" type="password" />
-                        </div>
-                      </div> -->
-                      <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label"></label>
-                        <div class="col-lg-9">
-                          <input type="reset" class="btn btn-secondary mr-5" value="キャンセル" />
-                          <input type="button" class="btn btn-primary" value="保存する" @click="formSubmit" />
+                        <label class="col-md-3 col-form-label form-control-label"></label>
+                        <div class="col-md-9">
+                          <input type="reset" class="btn btn-sm btn-outline-secondary mr-5" value="キャンセル" />
+                          <input type="button" class="btn btn-sm btn-outline-primary" value="保存する" @click="formSubmit" />
                         </div>
                       </div>
                   </form>
@@ -64,7 +46,7 @@
           </div>
           <!-- /form user info -->
       </div>
-      <div id="toastInputMessage myToast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+      <div id="toastInputMessage" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
         <div class="toast-header">
           <!-- <img src="..." class="rounded mr-2" alt="..."> -->
           <strong class="mr-auto">ユーザー入力 <i class="fas fa-user-plus"></i></strong>
@@ -86,7 +68,7 @@ export default ({
     name: 'user-data-input',
     data() {
         return {
-            userData: {
+          userData: {
                 userName    : localStorage.getItem('user-name'),
                 userPassword: localStorage.getItem('user-password'),
                 firstName   : "",
